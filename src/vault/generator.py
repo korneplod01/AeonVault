@@ -25,7 +25,7 @@ class PasswordGenerator:
             self.logs.write_log(message, tag)
 
 
-    def generate_segmented_password(self, segment_length=6, segments=3, 
+    def generate_segmented_password(self, segment_length=6, segments_amount=3, 
                                     separator='-', include_special=False):
             '''
             Генерация пароля с сегментами вида 6-6-6 или подобного
@@ -41,7 +41,7 @@ class PasswordGenerator:
                 charset = string.ascii_letters + string.digits
             
             password_parts = []
-            for i in range(segments):
+            for i in range(segments_amount):
                 segment = ''.join(secrets.choice(charset) for _ in range(segment_length))
                 
                 # Гарантируем наличие хотя бы одной буквы в каждом сегменте
@@ -54,7 +54,7 @@ class PasswordGenerator:
             password = separator.join(password_parts)
             
             if self.logs:
-                self._log(f'Generated segmented password: {segment_length}x{segments} '
+                self._log(f'Generated segmented password: {segment_length}x{segments_amount} '
                         f'with separator "{separator}"', 'generator')
             
             return password
@@ -112,7 +112,7 @@ class PasswordGenerator:
 
     def _simple_vector(self, word):
         '''Создание простого векторного представления слова'''
-        vector = [0] * 26  # для 26 букв английского алфавита
+        vector = [0] * 26 # для 26 букв английского алфавита
         word = word.lower()
         
         for char in word:
@@ -247,34 +247,34 @@ class PasswordGenerator:
         return password, theme_word, selected_words
 
 
-logst = LogStorage()
-generator = PasswordGenerator(logst)
-# 1. Тест сегментированных паролей
-print("1. СЕГМЕНТИРОВАННЫЕ ПАРОЛИ:")
-print(f"   6-6-6: {generator.generate_segmented_password(6, 3, '-')}")
-print(f"   4-4-4-4: {generator.generate_segmented_password(4, 4, '-')}")
-print(f"   8-8 (с спецсимволами): {generator.generate_segmented_password(8, 2, '-', True)}")
+# logst = LogStorage()
+# generator = PasswordGenerator(logst)
+# # 1. Тест сегментированных паролей
+# print("1. СЕГМЕНТИРОВАННЫЕ ПАРОЛИ:")
+# print(f"   6-6-6: {generator.generate_segmented_password(6, 3, '-')}")
+# print(f"   4-4-4-4: {generator.generate_segmented_password(4, 4, '-')}")
+# print(f"   8-8 (с спецсимволами): {generator.generate_segmented_password(8, 2, '-', True)}")
 
 
-# 2. Тест произносимых паролей
-print("\n3. ПРОИЗНОСИМЫЕ ПАРОЛИ:")
-print(f"   4 слога: {generator.generate_readable_password(4)}")
-print(f"   6 слогов: {generator.generate_readable_password(6)}")
+# # 2. Тест произносимых паролей
+# print("\n3. ПРОИЗНОСИМЫЕ ПАРОЛИ:")
+# print(f"   4 слога: {generator.generate_readable_password(4)}")
+# print(f"   6 слогов: {generator.generate_readable_password(6)}")
 
-# 3. Тест семантических паролей
-print("\n4. СЕМАНТИЧЕСКИЕ ПАРОЛИ (со смыслом):")
+# # 3. Тест семантических паролей
+# print("\n4. СЕМАНТИЧЕСКИЕ ПАРОЛИ (со смыслом):")
 
-# Создаем тестовый список слов
-test_words = [
-    "sun", "moon", "star", "sky", "cloud", "rain", "snow", "wind",
-    "tree", "flower", "river", "mountain", "ocean", "forest", "earth"
-]
-generator.word_list = test_words
+# # Создаем тестовый список слов
+# test_words = [
+#     "sun", "moon", "star", "sky", "cloud", "rain", "snow", "wind",
+#     "tree", "flower", "river", "mountain", "ocean", "forest", "earth"
+# ]
+# generator.word_list = test_words
 
-for theme in ["sun", "tree", "water"]:
-    password, main_word, words = generator.generate_semantic_password(
-        theme_word=theme, 
-        password_length=3
-    )
-    print(f"   Тема '{theme}': {password}")
-    print(f"   Использованные слова: {words}")
+# for theme in ["sun", "tree", "water"]:
+#     password, main_word, words = generator.generate_semantic_password(
+#         theme_word=theme, 
+#         password_length=3
+#     )
+#     print(f"   Тема '{theme}': {password}")
+#     print(f"   Использованные слова: {words}")
